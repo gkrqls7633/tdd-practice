@@ -6,7 +6,7 @@
 <br>
 
 ## 개발 환경
-- 'java 17'
+- `java 17`
 - **Framework** : Springboot(3.4.2)
 - **Database** : H2 DB
   
