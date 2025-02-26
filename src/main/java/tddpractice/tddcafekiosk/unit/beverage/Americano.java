@@ -3,11 +3,11 @@ package tddpractice.tddcafekiosk.unit.beverage;
 public class Americano implements Beverage{
     @Override
     public String getName() {
-        return "";
+        return "아메리카노";
     }
 
     @Override
     public int getPrice() {
-        return 0;
+        return 4000;
     }
 }
