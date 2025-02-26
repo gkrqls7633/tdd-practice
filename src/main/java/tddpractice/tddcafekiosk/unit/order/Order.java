@@ -19,5 +19,13 @@ public class Order {
 
     private final LocalDateTime orderDateTime;
     private final List<Beverage> beverages;
+    private final int START_OPERATION_TIME = 10;
+    private final int END_OPERATION_TIME = 22;
+    
+    public Boolean validOrderTime(LocalDateTime dateTime) {
+    	 LocalDateTime startTime = dateTime.toLocalDate().atTime(START_OPERATION_TIME, 0); // 10시
+         LocalDateTime endTime = dateTime.toLocalDate().atTime(END_OPERATION_TIME, 0);   // 22시
 
+         return !dateTime.isBefore(startTime) && !dateTime.isAfter(endTime);
+    }
 }

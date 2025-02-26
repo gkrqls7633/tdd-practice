@@ -5,4 +5,11 @@ public interface Beverage {
     String getName();
 
     int getPrice();
+    
+    int getCount();
+    
+    void addCount();
+    
+    void returnCount();
+    
 }

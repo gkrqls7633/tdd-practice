@@ -18,17 +18,21 @@ public class CafeKiosk {
     }
 
     public void remove(Beverage beverage) {
+    	beverage.returnCount();
         beverages.remove(beverage);
     }
 
     public void clear() {
+    	for (Beverage beverage : beverages) {
+    		beverage.returnCount();
+    	}
         beverages.clear();
     }
 
     public int calculateTotalPrice() {
         int totalPrice = 0;
         for (Beverage beverage : beverages) {
-            totalPrice += beverage.getPrice();
+            totalPrice += beverage.getPrice() * beverage.getCount();
         }
         return totalPrice;
     }
@@ -36,5 +40,8 @@ public class CafeKiosk {
     public Order createOrder() {
         return new Order(LocalDateTime.now(), beverages);
     }
-
+    
+    public void addBeverageCount(Beverage beverage) {
+    	beverage.addCount();
+    }
 }
