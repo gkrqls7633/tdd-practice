@@ -22,10 +22,14 @@ public class Order {
     private final int START_OPERATION_TIME = 10;
     private final int END_OPERATION_TIME = 22;
     
-    public Boolean validOrderTime(LocalDateTime dateTime) {
-    	 LocalDateTime startTime = dateTime.toLocalDate().atTime(START_OPERATION_TIME, 0); // 10시
-         LocalDateTime endTime = dateTime.toLocalDate().atTime(END_OPERATION_TIME, 0);   // 22시
+    public Boolean validOrderTime() {
+    	 LocalDateTime startTime = this.orderDateTime.toLocalDate().atTime(START_OPERATION_TIME, 0); // 10시
+         LocalDateTime endTime = this.orderDateTime.toLocalDate().atTime(END_OPERATION_TIME, 0);   // 22시
 
-         return !dateTime.isBefore(startTime) && !dateTime.isAfter(endTime);
+         return !this.orderDateTime.isBefore(startTime) && !this.orderDateTime.isAfter(endTime);
     }
+    
+
+    // 주문 목록에 음료 추가 삭제
+    // 키오스크에 있는 음료 리스트를 주문 기능으로 가져온다.
 }
