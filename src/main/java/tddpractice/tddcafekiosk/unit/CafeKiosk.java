@@ -5,11 +5,15 @@ import tddpractice.tddcafekiosk.unit.beverage.Beverage;
 import tddpractice.tddcafekiosk.unit.order.Order;
 
 import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.List;
 
 @Getter
 public class CafeKiosk {
+
+//    private static final LocalTime storeStartTime = LocalTime.of(10, 0);
+//    private static final LocalTime storeEndTime = LocalTime.of(22, 0);
 
     private final List<Beverage> beverages = new ArrayList<>();
 
@@ -46,8 +50,8 @@ public class CafeKiosk {
         return totalPrice;
     }
 
-    public Order createOrder() {
-        return new Order(LocalDateTime.now(), beverages);
+    public Order createOrder(LocalDateTime orderDateTime) {
+        return new Order(orderDateTime, beverages);
     }
 
 }
