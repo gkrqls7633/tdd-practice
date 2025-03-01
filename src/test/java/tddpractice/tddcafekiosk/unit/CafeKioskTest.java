@@ -69,13 +69,36 @@ class CafeKioskTest {
         LocalTime storeStartTime = LocalTime.of(10, 0);
         LocalTime storeEndTime = LocalTime.of(22, 0);
 
+        LocalDateTime orderDateTime = LocalDateTime.now().withHour(22).withMinute(0);
+
         // when & then
         // 주문 시간이 10시 ~ 22시 사이인지 검증
-        assertThatThrownBy(() -> cafeKiosk.createOrder(LocalDateTime.now()))
+        assertThatThrownBy(() -> cafeKiosk.createOrder(orderDateTime))
                 .isInstanceOf(IllegalArgumentException.class)
                 .hasMessage("주문 가능 시간이 아닙니다. (10시~22시)")
                 .satisfies(ex -> log.error("예외 발생: ", ex));
-
     }
+
+    @DisplayName("영업시간에는 주문 생성이 가능하다.")
+    @Test
+    void addWithOpenStore() {
+
+        // given
+        CafeKiosk cafeKiosk = new CafeKiosk();
+        Americano americano = new Americano();
+
+        LocalTime storeStartTime = LocalTime.of(10, 0);
+        LocalTime storeEndTime = LocalTime.of(22, 0);
+
+        LocalDateTime orderDateTime = LocalDateTime.now().withHour(20).withMinute(0);
+        LocalTime orderTime = orderDateTime.toLocalTime();
+
+        // when & then
+        // 주문 시간이 10시 ~ 22시 사이인지 검증
+        assertThat(orderTime)
+                .isAfterOrEqualTo(storeStartTime)
+                .isBeforeOrEqualTo(storeEndTime);
+    }
+
 
 }
