@@ -4,7 +4,9 @@ import lombok.Getter;
 import tddpractice.tddcafekiosk.unit.beverage.Beverage;
 import tddpractice.tddcafekiosk.unit.order.Order;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -33,8 +35,28 @@ public class CafeKiosk {
         return totalPrice;
     }
 
-    public Order createOrder() {
-        return new Order(LocalDateTime.now(), beverages);
+    public Order createOrder(LocalDateTime now) throws Exception {
+    	
+    	LocalDateTime openTime = LocalDateTime.of(LocalDate.now(), LocalTime.of(10, 00));
+    	LocalDateTime closeTime = LocalDateTime.of(LocalDate.now(), LocalTime.of(22, 00));
+    	
+    	if(now.isBefore(openTime) || now.isAfter(closeTime)) {
+    		throw new Exception("가게 운영시간이 아닙니다.");
+    	}
+    	
+        return new Order(now, beverages);
+    }
+    
+    public void addMany(Beverage beverage, int count) {
+    	
+    	if(count <= 0) {
+    		throw new NullPointerException("음료는 1잔 이상 주문하셔야 합니다.");
+    	}
+    	
+    	for(int i=0; i<count; i++) {
+    		beverages.add(beverage);
+    	}
+    	
     }
 
 }
