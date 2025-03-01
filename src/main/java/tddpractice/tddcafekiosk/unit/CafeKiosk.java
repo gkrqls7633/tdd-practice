@@ -38,6 +38,16 @@ public class CafeKiosk {
         beverages.remove(beverage);
     }
 
+    public void remove(Beverage beverage, int count) {
+        if (count == 0) {
+            throw new IllegalArgumentException("제거할 음료는 적어도 1개 이상이어야 합니다.");
+        }
+
+        for (int i = 0; i < count; i++) {
+            beverages.remove(beverage);
+        }
+    }
+
     public void clear() {
         beverages.clear();
     }

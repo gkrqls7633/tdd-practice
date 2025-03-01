@@ -44,7 +44,7 @@ class CafeKioskTest {
 
     @DisplayName("키오스크 주문 목록에 상품을 추가한다.")
     @Test
-    void add() {
+    void addBeverage() {
 
         //given
         CafeKiosk cafeKiosk = new CafeKiosk();
@@ -100,5 +100,34 @@ class CafeKioskTest {
                 .isBeforeOrEqualTo(storeEndTime);
     }
 
+    @DisplayName("주문목록에서 음료를 제거할 수 있다.")
+    @Test
+    void removeBeverages() {
+
+        //given
+        CafeKiosk cafeKiosk = new CafeKiosk();
+        Americano americano = new Americano();
+
+        cafeKiosk.add(americano, 1);
+
+        //when & then
+        cafeKiosk.remove(americano);
+        assertThat(cafeKiosk.getBeverages()).hasSize(0);
+    }
+
+    @DisplayName("주문목록에서 음료 제거는 1개 이상 해야한다.")
+    @Test
+    void removeZeroBeverage() {
+
+        //given
+        CafeKiosk cafeKiosk = new CafeKiosk();
+        Americano americano = new Americano();
+
+        // when & then
+        assertThatThrownBy(() -> cafeKiosk.remove(americano, 0))
+                .isInstanceOf(IllegalArgumentException.class)
+                .hasMessage("제거할 음료는 적어도 1개 이상이어야 합니다.")
+                .satisfies(ex -> log.error("예외 발생: ", ex));
+    }
 
 }
