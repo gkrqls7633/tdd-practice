@@ -1,19 +1,16 @@
 package tddpractice.tddcafekiosk.unit;
 
 import lombok.Getter;
+import tddpractice.tddcafekiosk.unit.beverage.Americano;
 import tddpractice.tddcafekiosk.unit.beverage.Beverage;
 import tddpractice.tddcafekiosk.unit.order.Order;
 
 import java.time.LocalDateTime;
-import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.List;
 
 @Getter
 public class CafeKiosk {
-
-//    private static final LocalTime storeStartTime = LocalTime.of(10, 0);
-//    private static final LocalTime storeEndTime = LocalTime.of(22, 0);
 
     private final List<Beverage> beverages = new ArrayList<>();
 
@@ -45,6 +42,7 @@ public class CafeKiosk {
 
         for (int i = 0; i < count; i++) {
             beverages.remove(beverage);
+
         }
     }
 

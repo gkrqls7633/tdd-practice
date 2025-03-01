@@ -130,4 +130,21 @@ class CafeKioskTest {
                 .satisfies(ex -> log.error("예외 발생: ", ex));
     }
 
+    @DisplayName("주문목록을 비운다.")
+    @Test
+    void clearBeverages() {
+        //given
+        CafeKiosk cafeKiosk = new CafeKiosk();
+        Americano americano = new Americano();
+        Latte latte = new Latte();
+
+        cafeKiosk.add(americano, 1);
+        cafeKiosk.add(latte, 2);
+
+        //when
+        cafeKiosk.clear();
+
+        //then
+        assertThat(cafeKiosk.getBeverages()).isEmpty();
+    }
 }
