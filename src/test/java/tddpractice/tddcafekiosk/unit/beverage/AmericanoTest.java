@@ -12,23 +12,18 @@ import static org.assertj.core.api.Assertions.assertThat;
  */
 class AmericanoTest {
 
-    @DisplayName("아메리카노 이름은 아메리카노다.")
     @Test
-    void americanoNameCheck() {
-        //given
+    void getName() {
         Americano americano = new Americano();
 
-        //when & then
+//        assertEquals(americano.getName(), "아메리카노");
         assertThat(americano.getName()).isEqualTo("아메리카노");
     }
 
-    @DisplayName("아메리카노의 가격은 4000원이다.")
     @Test
-    void americanoPriceCheck() {
-        //given
+    void getPrice() {
         Americano americano = new Americano();
 
-        //when & then
         assertThat(americano.getPrice()).isEqualTo(4000);
     }
 

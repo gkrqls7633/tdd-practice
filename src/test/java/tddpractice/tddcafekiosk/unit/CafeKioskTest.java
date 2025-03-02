@@ -25,136 +25,118 @@ import static org.assertj.core.api.Assertions.*;
 
 class CafeKioskTest {
 
-    private static final Logger log = LoggerFactory.getLogger(CafeKioskTest.class);
-
-    @DisplayName("하나의 음료는 적어도 1개 이상의 음료를 포함해야 한다. ")
     @Test
-    void addZeroBeverage() {
-        //given
+    void add_manual_test() {
+        CafeKiosk cafeKiosk = new CafeKiosk();
+        cafeKiosk.add(new Americano());
+
+        System.out.println(">>> 담긴 음료 수 : " + cafeKiosk.getBeverages().size());
+        System.out.println(">>> 담긴 음료 : " + cafeKiosk.getBeverages().get(0).getName());
+    }
+
+    @Test
+    void add() {
+        CafeKiosk cafeKiosk = new CafeKiosk();
+        cafeKiosk.add(new Americano());
+
+        assertThat(cafeKiosk.getBeverages()).hasSize(1);
+        assertThat(cafeKiosk.getBeverages().get(0).getName()).isEqualTo("아메리카노");
+    }
+
+    @Test
+    void addSeveralBeverages() {
         CafeKiosk cafeKiosk = new CafeKiosk();
         Americano americano = new Americano();
 
-        // when & then
+        cafeKiosk.add(americano, 2);
+
+        assertThat(cafeKiosk.getBeverages().get(0)).isEqualTo(americano);
+        assertThat(cafeKiosk.getBeverages().get(1)).isEqualTo(americano);
+    }
+
+    @Test
+    void addZeroBeverages() {
+        CafeKiosk cafeKiosk = new CafeKiosk();
+        Americano americano = new Americano();
+
         assertThatThrownBy(() -> cafeKiosk.add(americano, 0))
                 .isInstanceOf(IllegalArgumentException.class)
-                .hasMessage("음료 개수는 1 이상이어야 합니다.")
-                .satisfies(ex -> log.error("예외 발생: ", ex));
+                .hasMessage("음료는 1잔 이상 주문하실 수 있습니다.");
     }
 
-    @DisplayName("키오스크 주문 목록에 상품을 추가한다.")
     @Test
-    void addBeverage() {
-        //given
-        CafeKiosk cafeKiosk = new CafeKiosk();
-        Americano americano = new Americano();
-        Latte latte = new Latte();
-
-        cafeKiosk.add(americano, 1);
-        cafeKiosk.add(latte, 1);
-
-        // when & then
-        assertThat(cafeKiosk.getBeverages()).hasSize(2);
-    }
-
-    @DisplayName("영업시간이 아닌 시간에 주문을 생성할 수 없다.")
-    @Test
-    void createOrderWithNotOpenStore() {
-        // given
+    void remove() {
         CafeKiosk cafeKiosk = new CafeKiosk();
         Americano americano = new Americano();
 
-        cafeKiosk.add(americano, 1);
-        LocalDateTime orderDateTime = LocalDateTime.now().withHour(22).withMinute(0);
+        cafeKiosk.add(americano);
+        assertThat(cafeKiosk.getBeverages()).hasSize(1);
 
-        // when & then
-        // 주문 시간이 10시 ~ 22시 사이인지 검증
-        assertThatThrownBy(() -> cafeKiosk.createOrder(orderDateTime))
-                .isInstanceOf(IllegalArgumentException.class)
-                .hasMessage("주문 가능 시간이 아닙니다. (10시~22시)")
-                .satisfies(ex -> log.error("예외 발생: ", ex));
-    }
-
-    @DisplayName("주문 생성은 주문 음료가 적어도 1개 이상 있어야한다.")
-    @Test
-    void createOrderWithNoBeverage() {
-
-        // given
-        CafeKiosk cafeKiosk = new CafeKiosk();
-        Americano americano = new Americano();
-
-        cafeKiosk.add(americano, 1);
-        LocalDateTime orderDateTime = LocalDateTime.now().withHour(20).withMinute(0);
-
-        // when
-        Order order = cafeKiosk.createOrder(orderDateTime);
-
-        // then
-        assertThat(order.getBeverages()).hasSize(1);
-    }
-
-    @DisplayName("영업시간에는 주문 생성이 가능하다.")
-    @Test
-    void addWithOpenStore() {
-        // given
-        CafeKiosk cafeKiosk = new CafeKiosk();
-        Americano americano = new Americano();
-
-        LocalTime storeStartTime = LocalTime.of(10, 0);
-        LocalTime storeEndTime = LocalTime.of(22, 0);
-
-        LocalDateTime orderDateTime = LocalDateTime.now().withHour(20).withMinute(0);
-        LocalTime orderTime = orderDateTime.toLocalTime();
-
-        // when & then
-        // 주문 시간이 10시 ~ 22시 사이인지 검증
-        assertThat(orderTime)
-                .isAfterOrEqualTo(storeStartTime)
-                .isBeforeOrEqualTo(storeEndTime);
-    }
-
-    @DisplayName("주문목록에서 음료를 제거할 수 있다.")
-    @Test
-    void removeBeverages() {
-        //given
-        CafeKiosk cafeKiosk = new CafeKiosk();
-        Americano americano = new Americano();
-
-        cafeKiosk.add(americano, 1);
-
-        //when & then
         cafeKiosk.remove(americano);
-        assertThat(cafeKiosk.getBeverages()).hasSize(0);
-    }
-
-    @DisplayName("주문목록에서 음료 제거는 1개 이상 해야한다.")
-    @Test
-    void removeZeroBeverage() {
-        //given
-        CafeKiosk cafeKiosk = new CafeKiosk();
-        Americano americano = new Americano();
-
-        // when & then
-        assertThatThrownBy(() -> cafeKiosk.remove(americano, 0))
-                .isInstanceOf(IllegalArgumentException.class)
-                .hasMessage("제거할 음료는 적어도 1개 이상이어야 합니다.")
-                .satisfies(ex -> log.error("예외 발생: ", ex));
-    }
-
-    @DisplayName("주문목록을 비운다.")
-    @Test
-    void clearBeverages() {
-        //given
-        CafeKiosk cafeKiosk = new CafeKiosk();
-        Americano americano = new Americano();
-        Latte latte = new Latte();
-
-        cafeKiosk.add(americano, 1);
-        cafeKiosk.add(latte, 2);
-
-        //when
-        cafeKiosk.clear();
-
-        //then
         assertThat(cafeKiosk.getBeverages()).isEmpty();
     }
+
+    @Test
+    void clear() {
+        CafeKiosk cafeKiosk = new CafeKiosk();
+        Americano americano = new Americano();
+        Latte latte = new Latte();
+
+        cafeKiosk.add(americano);
+        cafeKiosk.add(latte);
+        assertThat(cafeKiosk.getBeverages()).hasSize(2);
+
+        cafeKiosk.clear();
+        assertThat(cafeKiosk.getBeverages()).isEmpty();
+    }
+
+    @Test
+    void calculateTotalPrice() {
+        CafeKiosk cafeKiosk = new CafeKiosk();
+        Americano americano = new Americano();
+        Latte latte = new Latte();
+
+        cafeKiosk.add(americano);
+        cafeKiosk.add(latte);
+
+        int totalPrice = cafeKiosk.calculateTotalPrice();
+
+        assertThat(totalPrice).isEqualTo(8500);
+    }
+
+    @Test
+    void createOrder() {
+        CafeKiosk cafeKiosk = new CafeKiosk();
+        Americano americano = new Americano();
+        cafeKiosk.add(americano);
+
+        Order order = cafeKiosk.createOrder();
+
+        assertThat(order.getBeverages()).hasSize(1);
+        assertThat(order.getBeverages().get(0).getName()).isEqualTo("아메리카노");
+    }
+
+    @Test
+    void createOrderWithCurrentTime() {
+        CafeKiosk cafeKiosk = new CafeKiosk();
+        Americano americano = new Americano();
+        cafeKiosk.add(americano);
+
+        Order order = cafeKiosk.createOrder(LocalDateTime.of(2023, 1, 17, 10, 0));
+
+        assertThat(order.getBeverages()).hasSize(1);
+        assertThat(order.getBeverages().get(0).getName()).isEqualTo("아메리카노");
+    }
+
+    @Test
+    void createOrderOutsideOpenTime() {
+        CafeKiosk cafeKiosk = new CafeKiosk();
+        Americano americano = new Americano();
+        cafeKiosk.add(americano);
+
+        assertThatThrownBy(() -> cafeKiosk.createOrder(LocalDateTime.of(2023, 1, 17, 9, 59)))
+                .isInstanceOf(IllegalArgumentException.class)
+                .hasMessage("주문 시간이 아닙니다. 관리자에게 문의하세요.");
+    }
+
 }

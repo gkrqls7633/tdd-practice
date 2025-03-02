@@ -5,11 +5,15 @@ import tddpractice.tddcafekiosk.unit.beverage.Beverage;
 import tddpractice.tddcafekiosk.unit.order.Order;
 
 import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.List;
 
 @Getter
 public class CafeKiosk {
+
+    private static final LocalTime SHOP_OPEN_TIME = LocalTime.of(10, 0);
+    private static final LocalTime SHOP_CLOSE_TIME = LocalTime.of(22, 0);
 
     private final List<Beverage> beverages = new ArrayList<>();
 
@@ -17,32 +21,18 @@ public class CafeKiosk {
         beverages.add(beverage);
     }
 
-    // 20250226 요구사항 추가 : 한 종류의 음료 여러 잔을 한 번에 담는 기능 추가
     public void add(Beverage beverage, int count) {
-
-        if (count == 0) {
-            throw new IllegalArgumentException("음료 개수는 1 이상이어야 합니다.");
+        if (count <= 0) {
+            throw new IllegalArgumentException("음료는 1잔 이상 주문하실 수 있습니다.");
         }
 
         for (int i = 0; i < count; i++) {
             beverages.add(beverage);
         }
-
     }
 
     public void remove(Beverage beverage) {
         beverages.remove(beverage);
-    }
-
-    public void remove(Beverage beverage, int count) {
-        if (count == 0) {
-            throw new IllegalArgumentException("제거할 음료는 적어도 1개 이상이어야 합니다.");
-        }
-
-        for (int i = 0; i < count; i++) {
-            beverages.remove(beverage);
-
-        }
     }
 
     public void clear() {
@@ -50,15 +40,28 @@ public class CafeKiosk {
     }
 
     public int calculateTotalPrice() {
-        int totalPrice = 0;
-        for (Beverage beverage : beverages) {
-            totalPrice += beverage.getPrice();
-        }
-        return totalPrice;
+        return beverages.stream()
+                .mapToInt(Beverage::getPrice)
+                .sum();
     }
 
-    public Order createOrder(LocalDateTime orderDateTime) {
-        return new Order(orderDateTime, beverages);
+    public Order createOrder() {
+        LocalDateTime currentDateTime = LocalDateTime.now();
+        LocalTime currentTime = currentDateTime.toLocalTime();
+        if (currentTime.isBefore(SHOP_OPEN_TIME) || currentTime.isAfter(SHOP_CLOSE_TIME)) {
+            throw new IllegalArgumentException("주문 시간이 아닙니다. 관리자에게 문의하세요.");
+        }
+
+        return new Order(currentDateTime, beverages);
+    }
+
+    public Order createOrder(LocalDateTime currentDateTime) {
+        LocalTime currentTime = currentDateTime.toLocalTime();
+        if (currentTime.isBefore(SHOP_OPEN_TIME) || currentTime.isAfter(SHOP_CLOSE_TIME)) {
+            throw new IllegalArgumentException("주문 시간이 아닙니다. 관리자에게 문의하세요.");
+        }
+
+        return new Order(currentDateTime, beverages);
     }
 
 }
