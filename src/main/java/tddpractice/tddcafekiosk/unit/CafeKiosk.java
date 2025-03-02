@@ -1,6 +1,7 @@
 package tddpractice.tddcafekiosk.unit;
 
 import lombok.Getter;
+import tddpractice.tddcafekiosk.unit.beverage.Americano;
 import tddpractice.tddcafekiosk.unit.beverage.Beverage;
 import tddpractice.tddcafekiosk.unit.order.Order;
 

@@ -30,6 +30,7 @@ class CafeKioskTest {
     @DisplayName("하나의 음료는 적어도 1개 이상의 음료를 포함해야 한다. ")
     @Test
     void addZeroBeverage() {
+
         //given
         CafeKiosk cafeKiosk = new CafeKiosk();
         Americano americano = new Americano();
@@ -44,6 +45,7 @@ class CafeKioskTest {
     @DisplayName("키오스크 주문 목록에 상품을 추가한다.")
     @Test
     void addBeverage() {
+
         //given
         CafeKiosk cafeKiosk = new CafeKiosk();
         Americano americano = new Americano();
@@ -58,12 +60,15 @@ class CafeKioskTest {
 
     @DisplayName("영업시간이 아닌 시간에 주문을 생성할 수 없다.")
     @Test
-    void createOrderWithNotOpenStore() {
+    void addWithNotOpenStore() {
+
         // given
         CafeKiosk cafeKiosk = new CafeKiosk();
         Americano americano = new Americano();
 
-        cafeKiosk.add(americano, 1);
+        LocalTime storeStartTime = LocalTime.of(10, 0);
+        LocalTime storeEndTime = LocalTime.of(22, 0);
+
         LocalDateTime orderDateTime = LocalDateTime.now().withHour(22).withMinute(0);
 
         // when & then
@@ -74,27 +79,10 @@ class CafeKioskTest {
                 .satisfies(ex -> log.error("예외 발생: ", ex));
     }
 
-    @DisplayName("주문 생성은 주문 음료가 적어도 1개 이상 있어야한다.")
-    @Test
-    void createOrderWithNoBeverage() {
-
-        // given
-        CafeKiosk cafeKiosk = new CafeKiosk();
-        Americano americano = new Americano();
-
-        cafeKiosk.add(americano, 1);
-        LocalDateTime orderDateTime = LocalDateTime.now().withHour(20).withMinute(0);
-
-        // when
-        Order order = cafeKiosk.createOrder(orderDateTime);
-
-        // then
-        assertThat(order.getBeverages()).hasSize(1);
-    }
-
     @DisplayName("영업시간에는 주문 생성이 가능하다.")
     @Test
     void addWithOpenStore() {
+
         // given
         CafeKiosk cafeKiosk = new CafeKiosk();
         Americano americano = new Americano();
@@ -115,6 +103,7 @@ class CafeKioskTest {
     @DisplayName("주문목록에서 음료를 제거할 수 있다.")
     @Test
     void removeBeverages() {
+
         //given
         CafeKiosk cafeKiosk = new CafeKiosk();
         Americano americano = new Americano();
@@ -129,6 +118,7 @@ class CafeKioskTest {
     @DisplayName("주문목록에서 음료 제거는 1개 이상 해야한다.")
     @Test
     void removeZeroBeverage() {
+
         //given
         CafeKiosk cafeKiosk = new CafeKiosk();
         Americano americano = new Americano();

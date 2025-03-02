@@ -26,14 +26,6 @@ public class Order {
 
     public Order (LocalDateTime orderDateTime, List<Beverage> beverages) {
 
-        int beverageCount = countBeverages(beverages);
-
-        //주문할 음료 목록이 없으면 에러
-        if(beverageCount == 0) {
-            throw new IllegalArgumentException("주문 생성 가능한 음료가 없습니다. 주문 목록을 다시 한번 확인해주세요.");
-        }
-
-        //주문 가능시간이 아닌경우 에러
         LocalTime orderTime = orderDateTime.toLocalTime();
         if (orderTime.isBefore(STORE_OPEN_TIME) || orderTime.isAfter(STORE_CLOSE_TIME)) {
             throw new IllegalArgumentException("주문 가능 시간이 아닙니다. (10시~22시)");
@@ -41,10 +33,7 @@ public class Order {
 
         this.orderDateTime = orderDateTime;
         this.beverages = beverages;
-    }
 
-    private int countBeverages(List<Beverage> beverages) {
-        return beverages.size();
     }
 
 
