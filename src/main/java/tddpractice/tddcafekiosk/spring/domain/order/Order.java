@@ -30,6 +30,9 @@ public class Order extends BaseEntity {
 
     private LocalDateTime registeredDateTime;
 
+    //전체 주문 수량
+    private int totalOrderProductCount;
+
     @OneToMany(mappedBy = "order", cascade = CascadeType.ALL)
     private List<OrderProduct> orderProducts = new ArrayList<>();
 
@@ -38,6 +41,7 @@ public class Order extends BaseEntity {
         this.orderStatus = OrderStatus.INIT;
         this.totalPrice = calculateTotalPrice(products);
         this.registeredDateTime = registeredDateTime;
+        this.totalOrderProductCount = products.size();  //전체 주문 수량
         this.orderProducts = products.stream()
                 .map(product -> new OrderProduct(this, product))
                 .collect(Collectors.toList());
@@ -47,9 +51,16 @@ public class Order extends BaseEntity {
         return new Order(products, registeredDateTime);
     }
 
+    //주문 가격 총합 계산
     private int calculateTotalPrice(List<Product> products) {
         return products.stream()
                 .mapToInt(Product::getPrice)
                 .sum();
+    }
+
+    //재고 수량 계산
+    public int calculateStockCount(Product product) {
+
+        return 0;
     }
 }
