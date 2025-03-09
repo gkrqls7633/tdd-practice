@@ -29,23 +29,8 @@ public class OrderService {
         List<String> productNumbers = new ArrayList<>(request.getProductNumberCounts().keySet());
         List<Product> products = findProductsBy(productNumbers);
 
-        //todo : 각 상품별 주문 수량 확인 후 재고 차감
-        //각 상품별 주문 수량 Map
-        Map<String, Integer> productNumberCounts = request.getProductNumberCounts();
-        for (Product product : products) {
-            //특정 상품의 주문 수
-            int productOrderCount = productNumberCounts.get(product.getProductNumber());
-
-            //기존 재고 수
-            int currentStockCount = product.getStockCount();
-            //주문 수만큼 재고 차감
-            int newStockCount = currentStockCount - productOrderCount;
-            if (newStockCount < 0) {
-                throw new IllegalArgumentException("재고 수량보다 주문 수가 많습니다.");
-            } else {
-                productRepository.save(product);
-            }
-        }
+        //각 상품별 주문 수량 확인 후 재고 차감
+        this.stockCheckAndUpdate(request, products);
 
         //조회된 상품들로 주문 객체 생성
         Order order = Order.create(products, registeredDateTime);
@@ -58,16 +43,36 @@ public class OrderService {
 
         //저장된 Order정보 OrderResponse로 반환 필요?
         OrderResponse orderResponse = OrderResponse.of(savedOrder);
-
-        List<ProductResponse> productResponseList = orderResponse.getProducts();
-
         return orderResponse;
 
+    }
 
+    private void stockCheckAndUpdate(OrderCreateRequest request, List<Product> products) {
+        //각 상품별 주문 수량 Map
+        Map<String, Integer> productNumberCounts = request.getProductNumberCounts();
+        for (Product product : products) {
+
+            //재고 관련 타입 체크(병 음료, 베이커리만 재고 처리 가능)
+            if (product.getType().checkRelatedStockProduct()) {
+                //특정 상품의 주문 수
+                int productOrderCount = productNumberCounts.get(product.getProductNumber());
+                //기존 재고 수
+                int currentStockCount = product.getStockCount();
+                //주문 수만큼 재고 차감
+                int newStockCount = currentStockCount - productOrderCount;
+                if (newStockCount < 0) {
+                    throw new IllegalArgumentException("재고 수량보다 주문 수가 많습니다.");
+                } else {
+                    productRepository.save(product);
+                }
+
+            } else{
+                throw new IllegalArgumentException("재고와 관련 있는 상품 타입이 아닙니다.");
+            }
+        }
     }
 
     private List<Product> findProductsBy(List<String> productNumbers) {
         return productRepository.findAllByProductNumberIn(productNumbers);
     }
-
 }

@@ -13,4 +13,13 @@ public enum ProductType {
 
     private final String text;
 
+    public boolean checkRelatedStockProduct() {
+        if (this == BOTTLE || this == BAKERY) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+
 }
