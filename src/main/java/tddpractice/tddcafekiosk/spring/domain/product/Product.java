@@ -2,6 +2,7 @@ package tddpractice.tddcafekiosk.spring.domain.product;
 
 import jakarta.persistence.*;
 import lombok.AccessLevel;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import tddpractice.tddcafekiosk.spring.domain.BaseEntity;
@@ -27,5 +28,14 @@ public class Product extends BaseEntity {
     private String name;
 
     private int price;
+
+    @Builder
+    private Product(String productNumber, ProductType type, ProductSellingStatus sellingStatus, String name, int price) {
+        this.productNumber = productNumber;
+        this.type = type;
+        this.sellingStatus = sellingStatus;
+        this.name = name;
+        this.price = price;
+    }
 
 }
