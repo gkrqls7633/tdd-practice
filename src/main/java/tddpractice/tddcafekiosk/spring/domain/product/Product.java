@@ -47,6 +47,7 @@ public class Product extends BaseEntity {
         this.sellingStatus = sellingStatus;
         this.name = name;
         this.price = price;
+        this.stockCount = 10;  //재고 수량은 일단 10으로 임의 셋팅
     }
 
     //재고 수량 있는 생성자

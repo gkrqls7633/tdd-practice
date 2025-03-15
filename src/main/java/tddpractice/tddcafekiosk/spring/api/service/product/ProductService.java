@@ -17,6 +17,8 @@ public class ProductService {
     private final ProductRepository productRepository;
 
     public List<ProductResponse> getSellingProducts() {
+
+        // 상품의 판매 상태 : 판매중, 판매보류, 판매중지 → 판매중, 판매보류인 상태의 상품을 화면에 보여준다.
         List<Product> products = productRepository.findAllBySellingStatusIn(ProductSellingStatus.forDisplay());
 
         return products.stream()
