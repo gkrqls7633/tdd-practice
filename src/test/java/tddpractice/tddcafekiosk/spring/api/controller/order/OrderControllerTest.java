@@ -74,6 +74,11 @@ public class OrderControllerTest {
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.totalPrice").value(4000));
+
+        //파라미터 검증
+        Mockito.verify(orderService).createOrder(Mockito.argThat(argument ->
+                argument.getProductNumbers().equals(request.getProductNumbers())
+        ), Mockito.any(LocalDateTime.class));  // request의 productNumbers가 잘 전달됐는지 확인
     }
 
 }
