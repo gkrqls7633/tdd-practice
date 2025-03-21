@@ -34,7 +34,7 @@ class ProductRepositoryTest {
         Product product1 = Product.builder()
                 .productNumber("001")
                 .type(HANDMADE)
-                .sellingStatus(SELLING)  //판매상태
+                .sellingStatus(SELLING)  //판매상태(판매중)
                 .name("아메리카노")
                 .price(4000)
                 .build();
@@ -42,7 +42,7 @@ class ProductRepositoryTest {
         Product product2 = Product.builder()
                 .productNumber("002")
                 .type(HANDMADE)
-                .sellingStatus(HOLD)  //판매상태
+                .sellingStatus(HOLD)  //판매상태(판매보류)
                 .name("카페라떼")
                 .price(4500)
                 .build();
@@ -76,6 +76,7 @@ class ProductRepositoryTest {
                 .sellingStatus(SELLING)  //판매상태
                 .name("아메리카노")
                 .price(4000)
+                .stockCount(10)
                 .build();
 
         Product product2 = Product.builder()
@@ -84,6 +85,7 @@ class ProductRepositoryTest {
                 .sellingStatus(HOLD)  //판매상태
                 .name("카페라떼")
                 .price(4500)
+                .stockCount(10)
                 .build();
 
         //when
@@ -96,9 +98,11 @@ class ProductRepositoryTest {
         // when
         List<Product> products = productRepository.findAllBySellingStatusIn(List.of(SELLING, HOLD));
 
-        //then
+        // then
+        // 화면에 필요한 정보 : id, 상품 번호, 상품 타입, 판매상태, 상품 이름, 가격
         assertThat(products).isNotEmpty(); // 리스트가 비어 있으면 바로 실패
         for (Product product : products) {
+            assertThat(product.getId()).isNotNull();
             assertThat(product.getProductNumber()).isNotNull();
             assertThat(product.getType()).isNotNull();
             assertThat(product.getSellingStatus()).isNotNull();
