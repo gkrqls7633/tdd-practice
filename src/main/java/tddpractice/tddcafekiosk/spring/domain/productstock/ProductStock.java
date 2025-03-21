@@ -10,7 +10,7 @@ import tddpractice.tddcafekiosk.spring.domain.product.Product;
 @Getter
 @NoArgsConstructor
 //@Entity
-public class ProductStock extends BaseEntity {  //임시로 엔티티 생성만 해두고 사용은 안함.
+public class ProductStock extends BaseEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

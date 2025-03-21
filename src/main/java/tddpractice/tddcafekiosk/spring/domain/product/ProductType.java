@@ -13,7 +13,6 @@ public enum ProductType {
 
     private final String text;
 
-    //재고 가능 타입 체크
     public boolean checkRelatedStockProduct() {
         if (this == BOTTLE || this == BAKERY) {
             return true;
